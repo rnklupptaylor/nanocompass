@@ -1,0 +1,10 @@
+{
+  "name": "nanocompass",
+  "version": "8.0.0-dev",
+  "private": true,
+  "description": "Nanocompass (Superparamagnetism Explorer v8): question-led lessons on superparamagnetic nanoparticles and ferrofluids",
+  "scripts": {
+    "build": "node tools/v8/build.cjs",
+    "test": "node tests/v8/run_all.cjs"
+  }
+}

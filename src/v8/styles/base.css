@@ -1,0 +1,49 @@
+/* Nanocompass v8.0 · tokens and base styles. Tokens match Colour with Mie v29 so the two apps read as one family. */
+:root{
+  color-scheme:light;
+  --bg:#f3f3f0;--surface:#fcfcfb;--surface-2:#f0efec;--surface-3:#e7e6e1;
+  --ink:#141414;--ink-2:#52514e;--muted:#7b7a74;--line:#dcdbd4;--grid:#e8e7e1;--axis:#c3c2b7;
+  --accent:#2a78d6;--accent-ink:#ffffff;--accent-soft:#e3eefb;--pen:#d22b2b;
+  --north:#d8382c;--south:#9b988f;--logo-ink:#141414;--logo-rim:#485f88;
+  --warn-bg:#fff4d6;--warn-ink:#5c4300;--warn-line:#e9c45a;
+  --radius:10px;--shadow:0 1px 2px rgba(0,0,0,.05),0 2px 8px rgba(0,0,0,.04);
+  --ui:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,Consolas,monospace;--math:"STIX Two Text","Cambria Math",Georgia,serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#0f0f0e;--surface:#1a1a19;--surface-2:#232321;--surface-3:#2e2e2b;
+  --ink:#f0efec;--ink-2:#c3c2b7;--muted:#959489;--line:#33332f;--grid:#2a2a27;--axis:#4a4a45;
+  --accent:#3987e5;--accent-ink:#ffffff;--accent-soft:#1d2d42;--pen:#ff6e64;
+  --north:#ff6e5e;--south:#8f8d86;--logo-ink:#f0efec;--logo-rim:#8fa7d0;
+  --warn-bg:#3a2e0c;--warn-ink:#f6dc94;--warn-line:#7a6015;--shadow:none;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0f0f0e;--surface:#1a1a19;--surface-2:#232321;--surface-3:#2e2e2b;
+  --ink:#f0efec;--ink-2:#c3c2b7;--muted:#959489;--line:#33332f;--grid:#2a2a27;--axis:#4a4a45;
+  --accent:#3987e5;--accent-ink:#ffffff;--accent-soft:#1d2d42;--pen:#ff6e64;
+  --north:#ff6e5e;--south:#8f8d86;--logo-ink:#f0efec;--logo-rim:#8fa7d0;
+  --warn-bg:#3a2e0c;--warn-ink:#f6dc94;--warn-line:#7a6015;--shadow:none;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--ui);-webkit-font-smoothing:antialiased}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+
+/* Wordmark: the two o's are live compass needles (src/v8/ui/logo.js). */
+.nc-brand{display:inline-flex;align-items:center;color:var(--logo-ink);text-decoration:none;font-weight:750;letter-spacing:-.035em;line-height:1;white-space:nowrap;border-radius:8px}
+.nc-word{display:inline-flex;align-items:baseline}
+.nc-o{width:.6em;height:.6em;margin:0 .02em;align-self:center;transform:translateY(.09em);overflow:visible}
+.nc-rim{fill:none;stroke:var(--logo-rim);stroke-width:7;transition:stroke .3s}
+.nc-n{fill:var(--north)}.nc-s{fill:var(--south)}.nc-hub{fill:var(--logo-ink)}
+.nc-brand.nc-field .nc-rim{stroke:var(--accent)}
+
+/* Shared controls */
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:2px}
+.seg button{border:0;background:none;padding:5px 11px;border-radius:6px;font-size:13px;font-weight:700;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.icon-btn{color:inherit;text-decoration:none;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:5px 10px;font-size:13px;font-weight:700}
+.icon-btn:hover{border-color:var(--accent)}

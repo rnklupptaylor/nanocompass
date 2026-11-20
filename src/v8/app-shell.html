@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" data-level="lecture">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nanocompass · Superparamagnetism explored</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Ccircle r='42' fill='%23fcfcfb' stroke='%23485f88' stroke-width='8'/%3E%3Cpath d='M0 -34 L10 0 L-10 0Z' fill='%23d8382c'/%3E%3Cpath d='M0 34 L10 0 L-10 0Z' fill='%239b988f'/%3E%3C/svg%3E">
+<meta name="description" content="Interactive lessons on superparamagnetic nanoparticles and ferrofluids, from one flipping moment to patterns near a magnet.">
+<style>@@INCLUDE:src/v8/styles/fonts.css@@</style>
+<style>@@INCLUDE:src/v8/styles/base.css@@</style>
+<style>@@INCLUDE:src/v8/styles/start.css@@</style>
+<style>@@INCLUDE:src/v8/styles/lesson.css@@</style>
+</head>
+<body>
+<main id="start" class="start">
+  <div class="start-shell">
+    <header class="start-head">
+      <div class="start-heading">
+        <h1 id="startLogo"></h1>
+        <p class="start-intro">Ask how a nanoparticle forgets north. Follow it to chains, to the magnetometer and to the glowing lines of a ferrocell.</p>
+      </div>
+      <div class="start-controls">
+        <div class="start-control-group"><span class="start-control-label">Explanation</span><div id="startLevel"></div></div>
+        <div class="start-control-group"><span class="start-control-label">Appearance</span><div id="startTheme"></div></div>
+      </div>
+    </header>
+    <nav id="startLessons" class="start-grid" aria-label="Lessons, Lab and Theory"></nav>
+    <footer class="start-foot"><span>Start anywhere. Return here with the logo. Concept: Prof. Robin N. Klupp Taylor (FAU Erlangen-Nürnberg); developed with ChatGPT (2025), Codex and Claude (2026).</span><span>Nanocompass <span class="start-version">@@VERSION@@</span></span></footer>
+  </div>
+</main>
+<div id="app" hidden>
+  <header class="top">
+    <span id="topLogo"></span>
+    <div class="top-lesson"><span id="topNum" class="top-num"></span><span id="topName" class="top-name"></span></div>
+    <div class="top-tools"><div id="topLevel"></div><a class="icon-btn" href="#theory">Theory</a></div>
+  </header>
+  <main id="lessonView" class="lesson">
+    <h1 id="lessonQuestion" class="lesson-question"></h1>
+    <nav class="pane-tabs" id="paneTabs" aria-label="Lower panel"><button type="button" data-pane="controls">Controls</button><button type="button" data-pane="guide">Guide</button><button type="button" data-pane="plot" class="plot-tab">Plot</button></nav>
+    <div class="lesson-grid">
+      <section id="lessonStage" class="panel stage" aria-label="Simulation"></section>
+      <aside class="side">
+        <section class="panel controls-panel"><h2>Controls</h2><div id="lessonControls"></div></section>
+        <section class="panel guide"><h2>Guide</h2><div id="lessonGuide"></div></section>
+        <section class="panel plot-panel" id="lessonPlotPanel" aria-label="Plot"></section>
+      </aside>
+    </div>
+  </main>
+</div>
+<script>@@INCLUDE:src/v8/engines/planar.js@@</script>
+<script>@@INCLUDE:src/v8/content/lessons.js@@</script>
+<script>@@INCLUDE:src/v8/ui/logo.js@@</script>
+<script>@@INCLUDE:src/v8/ui/cards.js@@</script>
+<script>@@INCLUDE:src/v8/ui/slider.js@@</script>
+<script>@@INCLUDE:src/v8/ui/planar-view.js@@</script>
+<script>@@INCLUDE:src/v8/lessons/particles.js@@</script>
+<script>@@INCLUDE:src/v8/engines/magnetometer.js@@</script>
+<script>@@INCLUDE:src/v8/ui/magnetometer-view.js@@</script>
+<script>@@INCLUDE:src/v8/lessons/magnetometer.js@@</script>
+<script>@@INCLUDE:src/v8/engines/magnet-fields.js@@</script>
+<script>@@INCLUDE:src/v8/engines/ferrocell.js@@</script>
+<script>@@INCLUDE:src/v8/ui/ferrocell-view.js@@</script>
+<script>@@INCLUDE:src/v8/ui/ferrocell-inspector.js@@</script>
+<script>@@INCLUDE:src/v8/lessons/ferrocell.js@@</script>
+<script>@@INCLUDE:src/v8/lessons/destinations.js@@</script>
+<script>@@INCLUDE:src/v8/lessons/lab.js@@</script>
+<script>@@INCLUDE:src/v8/ui/app.js@@</script>
+</body>
+</html>
