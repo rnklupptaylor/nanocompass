@@ -147,6 +147,51 @@ html.in-lesson,html.in-lesson body{overflow:hidden;height:100%}
 .mg-steps li.next::before{background:var(--surface-3);color:var(--lesson-accent)}
 .mg-hint.mg-hint-low{top:auto;bottom:56px;transform:translateX(-50%)}
 
+/* Magnetic particle spectroscopy */
+.mg-spectroscopy .pv-bar{order:-1}
+.mg-modes{flex-wrap:wrap}
+.mps-panel{--mps-current:#256aaf;--mps-reference:#a05523;--mps-field:#646b75;flex:1;min-height:0;min-width:0;overflow:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:minmax(min-content,1fr);gap:8px}
+.mps-card{min-width:0;display:flex;flex-direction:column;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2)}
+.mps-switch{display:none}
+.mps-heading,.mps-actions,.mps-legend{display:flex;align-items:center;gap:4px 10px;flex-wrap:wrap}
+.mps-heading{justify-content:space-between}
+.mps-heading h2{margin:0;font-size:15px}
+.mps-select{max-width:100%;border:1px solid var(--line);border-radius:6px;padding:4px 6px;background:var(--surface);color:var(--ink);font:inherit;font-size:12px}
+.mps-caption,.mps-legend{margin:5px 0;color:var(--ink-2);font-size:12px;line-height:1.45}
+.mps-caption:empty{margin:0}
+.mps-tablebox{flex:1}
+.mps-spectrum{width:100%;height:100%;border-collapse:collapse;font:12px var(--mono);font-variant-numeric:tabular-nums}
+.mps-spectrum th,.mps-spectrum td{padding:3px 4px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}
+.mps-spectrum tr>:nth-child(2){width:100%;text-align:left}
+.mps-band{display:block;height:4px;border-radius:2px;background:var(--mps-current)}
+.mps-band+.mps-band{margin-top:3px}
+.mps-band.mps-reference{background:var(--mps-reference)}
+.mps-track{min-width:26px;padding:2px 0;background:var(--surface-3);border-radius:2px}
+.mps-actions{margin-top:8px}
+.mps-actions .pv-btn{padding:3px 8px;font-size:12px}
+.mps-actions .pv-btn:disabled{opacity:.55;cursor:default}
+.mps-legend span::before{content:'';display:inline-block;width:12px;margin:0 4px 3px 0;border-top:2px solid var(--mps-current)}
+.mps-legend .mps-field-key::before{border-top:2px dashed var(--mps-field)}
+.mps-wavebox{position:relative;flex:1;min-height:155px}
+.mps-wavebox canvas{position:absolute;inset:0;width:100%;height:100%}
+.mps-method a{color:inherit;text-decoration:underline}
+:root[data-theme="dark"] .mps-panel{--mps-current:#7abaff;--mps-reference:#edaa72;--mps-field:#abb7c7}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .mps-panel{--mps-current:#7abaff;--mps-reference:#edaa72;--mps-field:#abb7c7}}
+@container (max-width:650px){
+  .mps-panel{grid-template-columns:1fr;grid-template-rows:auto minmax(min-content,1fr)}
+  .mps-switch{display:inline-flex;justify-self:start}
+  .mps-panel[data-view="spectrum"] .mps-wave,.mps-panel[data-view="trace"] .mps-spectrum-card{display:none}
+}
+@media(max-width:900px){
+  .mps-panel{grid-template-columns:1fr;grid-template-rows:auto minmax(min-content,1fr);gap:5px}
+  .mps-switch{display:inline-flex;justify-self:start}
+  .mps-switch button{padding:3px 8px;font-size:12px}
+  .mps-panel[data-view="spectrum"] .mps-wave,.mps-panel[data-view="trace"] .mps-spectrum-card{display:none}
+  .mps-card{padding:8px}
+  .mps-spectrum th,.mps-spectrum td{padding:2px 4px}
+  .mps-actions{margin-top:5px}
+}
+
 /* Layer lessons (src/v8/ui/layer-view.js) */
 .lv-inner{flex:1 1 0;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,40%);gap:12px}
 .lv-map{display:flex;flex-direction:column;align-items:center;gap:6px;min-height:0;overflow:hidden}

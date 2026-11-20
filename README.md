@@ -14,6 +14,8 @@ Concept: Prof. Robin N. Klupp Taylor, FAU Erlangen-Nürnberg. Developed with Cha
 
 Each lesson has a Lecture and a Research level, a guide with "Set up" tasks, and fits the window without scrolling. The app is one offline HTML file and needs nothing but a modern browser.
 
+In the magnetometer, choose **MPS** to explore magnetic particle spectroscopy. Compare simulated pickup-coil spectra of two particle populations at fixed excitation, or change sample loading to see what harmonic normalization removes. The model uses a Langevin equilibrium response and constant effective relaxation times. The guide links to the experimental work on magnetic supraparticle fingerprints that inspired the lesson.
+
 ## Versions and addresses
 
 | What | Where |
@@ -43,6 +45,7 @@ The hosting service runs `npm run build` itself and publishes `build/v8/deploy`.
 | `src/v8/content/lessons.js` | Lesson catalogue (names, questions, slogans) |
 | `src/v8/engines/planar.js` | 2D particle engine: Brownian dynamics, Néel event clock, dipoles, sterics, Metropolis sampler, pair and structure statistics |
 | `src/v8/engines/magnetometer.js` | Ensemble model for M(H) loops, ZFC/FC and AC susceptibility |
+| `src/v8/engines/mps.js` | Steady-state MPS time traces and inductive harmonic spectra |
 | `src/v8/engines/magnet-fields.js`, `src/v8/engines/ferrocell.js` | Exact permanent-magnet fields; ferrocell twin (Keller-cone scattering by field-aligned needles, edge-lit and backlit light) |
 | `src/v8/ui/` | Start menu, logo, card pictures, sliders and the lesson views |
 | `src/v8/lessons/` | Lesson specifications and guides, the Lab and Theory |

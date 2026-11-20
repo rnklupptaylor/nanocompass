@@ -45,7 +45,12 @@ function mount(ctx,spec){
   const inner=el('div','mg-inner'),sampleWrap=el('div','mg-sample'),sample=el('canvas'),info=el('div','mg-info');sampleWrap.append(sample,info);
   const plotWrap=el('div','mg-plot'),steps=el('ol','mg-steps'),plotBox=el('div','mg-plotbox'),plot=el('canvas');plotBox.append(plot);const hint=el('div','mg-hint','Set the sample and conditions, then press Start measurement.');plotBox.append(hint);plotWrap.append(steps,plotBox);
   const bar=el('div','pv-bar');
-  const modes=el('div','seg mg-modes');for(const [m,label] of [['loop','M(H) loop'],['zfc','ZFC / FC'],['ac','AC susceptibility']]){const b=el('button','',label);b.type='button';b.dataset.m=m;b.onclick=()=>{cfg.mode=m;buildControls();prepare();};modes.append(b);}
+  const modes=el('div','seg mg-modes');modes.setAttribute('role','group');modes.setAttribute('aria-label','Measurement type');
+  for(const [m,label] of [['loop','M(H) loop'],['zfc','ZFC / FC'],['ac','AC susceptibility'],['mps','MPS']]){
+    const b=el('button','',label);b.type='button';b.dataset.m=m;b.onclick=()=>selectMode(m);
+    if(m==='mps'){b.title='Magnetic particle spectroscopy';b.setAttribute('aria-label','MPS (magnetic particle spectroscopy)');}
+    modes.append(b);
+  }
   const go=el('button','pv-btn pv-primary','Measure again'),keep=el('button','pv-btn','Keep curve'),clear=el('button','pv-btn','Clear');[go,keep,clear].forEach(b=>b.type='button');
   go.onclick=()=>{if(state==='running'){state='paused';}else if(state==='paused'){state='running';pauseNote='';if(pending){points.push(pending);pending=null;}}else{if(state==='done')prepare();state='running';last=0;}label();};keep.onclick=()=>{if(points.length){kept.push({mode:cfg.mode,against:cfg.against,points:points.slice()});kept=kept.slice(-4);}};clear.onclick=()=>{kept=[];drawPlot();};
   bar.append(modes,go,keep,clear);
@@ -53,7 +58,21 @@ function mount(ctx,spec){
   // in the measuring field, with the unblocked ones flipping.
   plot.addEventListener('click',e=>{if(cfg.mode!=='zfc'||state!=='done'||!plot._xmap)return;const m=plot._xmap,r=plot.getBoundingClientRect(),u=(e.clientX-r.left-m.L0)/(m.W-m.L0-m.R);
     inspectT=Math.max(5,Math.min(cfg.Tmax,m.xmin+u*(m.xmax-m.xmin)));display.forEach(p=>{p.inspectSign=null;});});
-  inner.append(sampleWrap,plotWrap);stage.append(inner,bar);
+  const mpsSpec=root.NanoMPSLesson,mps=root.NanoMPSView.create(mpsSpec,controls,curvePlot);
+  inner.append(sampleWrap,plotWrap);stage.append(inner,mps.panel,bar);
+
+  function selectMode(mode){
+    if(mode===cfg.mode)return;
+    cfg.mode=mode;
+    const spectroscopy=mode==='mps';
+    cancelAnimationFrame(raf);
+    inner.hidden=go.hidden=keep.hidden=clear.hidden=spectroscopy;
+    stage.classList.toggle('mg-spectroscopy',spectroscopy);
+    modes.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.m===mode)));
+    if(spectroscopy)mps.show();
+    else{mps.hide();buildControls();prepare();last=0;raf=requestAnimationFrame(frame);}
+    renderGuide();
+  }
 
   /* ---------- controls ---------- */
   const readouts=el('dl','pv-readouts');
@@ -67,14 +86,17 @@ function mount(ctx,spec){
   }
   /* ---------- guide ---------- */
   function renderGuide(){
-    guide.textContent='';const g=spec.guide[level]||spec.guide.lecture,sub=L.sub;
+    guide.textContent='';const source=cfg.mode==='mps'?mpsSpec.guide:spec.guide,g=source[level]||source.lecture,sub=L.sub;
     const para=(cls,t)=>{const p=el('p',cls);p.innerHTML=sub(t);return p;};
     guide.append(para('pv-aim',g.aim));guide.append(el('h3','','What you see'));guide.append(para('',g.read));
     guide.append(el('h3','','Try this'));const ol=el('ol');
     for(const t of g.tasks){const li=el('li'),sp=el('span');sp.innerHTML=sub(t.text);li.append(sp);
-      if(t.set){const b=el('button','pv-task-btn','Set up');b.type='button';b.onclick=()=>{if(t.clear)kept=[];Object.assign(cfg,t.set);buildControls();prepare();};li.append(' ',b);}ol.append(li);}
+      if(t.set){const b=el('button','pv-task-btn','Set up');b.type='button';b.onclick=()=>{
+        if(cfg.mode==='mps'){mps.show(t.set,t.clear);return;}
+        if(t.clear)kept=[];Object.assign(cfg,t.set);buildControls();prepare();
+      };li.append(' ',b);}ol.append(li);}
     guide.append(ol);
-    if(g.physics){guide.append(el('h3','','Physics'));const p=el('p','pv-physics');p.innerHTML=g.physics;guide.append(p);}
+    if(g.physics){guide.append(el('h3','','Physics'));const p=cfg.mode==='mps'?el('div','mps-method'):el('p','pv-physics');p.innerHTML=g.physics;guide.append(p);}
     if(g.check){const d=el('details','pv-check');d.append(el('summary','','Check yourself'));d.append(para('',g.check));const a=el('p','pv-answer');a.innerHTML='<b>Answer.</b> '+sub(g.answer);d.append(a);guide.append(d);}
   }
   /* ---------- measurement ---------- */
@@ -180,8 +202,8 @@ function mount(ctx,spec){
     readouts.textContent='';for(const [k,v,cls] of spec.readouts(mag,cfg,points)){const dt=el('dt'),dd=el('dd',cls||'');dt.innerHTML=L.sub(k);dd.innerHTML=L.sub(v);if(cls){dt.className='pv-verdict-label';dd.classList.add('pv-verdict');}readouts.append(dt,dd);}
   }
   buildControls();renderGuide();prepare();raf=requestAnimationFrame(frame);
-  root.NanoLogo.bind(()=>{if(!display.length||!mag)return null;return display.slice(0,2).map(p=>{const m=mag.axisMoment(p.i,p.j)*p.flip,a=(cfg.medium==='liquid'?0:p.axis)+(m<0?Math.PI:0);return a+Math.PI/2;});});
-  return {unmount(){cancelAnimationFrame(raf);root.NanoLogo.bind(null);}};
+  root.NanoLogo.bind(()=>{if(cfg.mode==='mps'||!display.length||!mag)return null;return display.slice(0,2).map(p=>{const m=mag.axisMoment(p.i,p.j)*p.flip,a=(cfg.medium==='liquid'?0:p.axis)+(m<0?Math.PI:0);return a+Math.PI/2;});});
+  return {unmount(){cancelAnimationFrame(raf);mps.hide();root.NanoLogo.bind(null);}};
 }
 function lesson(id,spec){root.NanoLessonViews=root.NanoLessonViews||{};let live=null;
   root.NanoLessonViews[id]={spec,mount(ctx){live=mount(ctx,spec);return live;},unmount(){live?.unmount();live=null;}};}
