@@ -1,6 +1,6 @@
 # Nanocompass
 
-**Open the app: https://nanocompass.pages.dev**
+**Open the app: https://nanocompass.ipt-apps.workers.dev**
 
 Nanocompass is a question-led teaching app about superparamagnetic nanoparticles and ferrofluids. It starts with one particle whose magnetic moment wanders at the Néel rate, then follows it to ferrofluid in a field, the magnetometer, chains and the glowing lines of a ferrocell. A Lab gives every control of the particle simulation, and a Theory page collects the physics.
 
@@ -18,8 +18,8 @@ Each lesson has a Lecture and a Research level, a guide with "Set up" tasks, and
 
 | What | Where |
 |---|---|
-| Live version (branch `main`) | https://nanocompass.pages.dev |
-| Version in development (branch `dev`) | https://dev.nanocompass.pages.dev |
+| Live version (branch `main`) | https://nanocompass.ipt-apps.workers.dev |
+| Version in development (branch `dev`) | https://dev-nanocompass.ipt-apps.workers.dev |
 | Released versions | [Releases](../../releases), tagged `v8.0`, `v8.1`, … |
 
 Every change to `main` goes live within about a minute. Work happens on `dev` (or on another branch, which gets its own preview address) and is merged into `main` when it is ready for students.
