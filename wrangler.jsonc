@@ -1,0 +1,8 @@
+// Cloudflare hosting settings: publish the built app (build/v8/deploy) as static files.
+// Cloudflare runs "npm run build" first, then "npx wrangler deploy" (main) or "npx wrangler versions upload" (other branches).
+{
+  "name": "nanocompass",
+  "compatibility_date": "2025-09-01",
+  "assets": { "directory": "./build/v8/deploy" },
+  "preview_urls": true
+}
