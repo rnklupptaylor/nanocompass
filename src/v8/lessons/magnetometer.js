@@ -1,4 +1,4 @@
-/* Nanocompass v8.0 · lesson "In the magnetometer": M(H) loops, ZFC/FC and AC susceptibility.
+/* Nanocompass v8.0 · Magnetic measurements lesson: M(H) loops, ZFC/FC and AC susceptibility.
  * Requested by Robin on 14 November 2026. Physics: src/v8/engines/magnetometer.js, checked by tests/v8/magnetometer.cjs. */
 (function(root){
 'use strict';

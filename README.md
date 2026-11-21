@@ -10,11 +10,11 @@ Concept: Prof. Robin N. Klupp Taylor, FAU Erlangen-Nürnberg. Developed with Cha
 
 ## Lessons
 
-00 One particle · 01 Ferrofluid in a field · 02 In the magnetometer · 03 Chains · 04 The ferrocell · Lab · Theory
+00 One particle · 01 Ferrofluid in a field · 02 Magnetic measurements · 03 Chains · 04 The ferrocell · Lab · Theory
 
 Each lesson has a Lecture and a Research level, a guide with "Set up" tasks, and fits the window without scrolling. The app is one offline HTML file and needs nothing but a modern browser.
 
-In the magnetometer, choose **MPS** to explore magnetic particle spectroscopy. Compare simulated pickup-coil spectra of two particle populations at fixed excitation, or change sample loading to see what harmonic normalization removes. The model uses a Langevin equilibrium response and constant effective relaxation times. The guide links to the experimental work on magnetic supraparticle fingerprints that inspired the lesson.
+In **Magnetic measurements**, choose **MPS** to explore magnetic particle spectroscopy. The setup shows how the drive coil and differential pickup work around the sample. Compare simulated pickup-coil spectra of two particle populations at fixed excitation, or change sample loading to see what harmonic normalization removes. The model uses a Langevin equilibrium response and constant effective relaxation times. The guide links to the experimental work on magnetic supraparticle fingerprints that inspired the lesson.
 
 ## Versions and addresses
 

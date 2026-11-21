@@ -1,4 +1,4 @@
-/* Nanocompass v8.0 · "In the magnetometer" lesson view: a sample of particles beside a measurement plot.
+/* Nanocompass v8.0 · Magnetic measurements lesson view: a sample of particles beside a measurement plot.
  * Runs src/v8/engines/magnetometer.js protocols point by point so students watch the curve being measured. */
 (function(root){
 'use strict';

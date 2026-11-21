@@ -35,8 +35,8 @@ function create(spec, controls, curvePlot) {
   panel.dataset.view = 'spectrum';
   const views = el('div', 'seg mps-switch');
   views.setAttribute('role', 'group');
-  views.setAttribute('aria-label', 'MPS plot');
-  for (const [view, label] of [['spectrum', 'Spectrum'], ['trace', 'Time trace']]) {
+  views.setAttribute('aria-label', 'MPS view');
+  for (const [view, label] of [['spectrum', 'Spectrum'], ['trace', 'Time trace'], ['setup', 'Setup']]) {
     const button = el('button', '', label);
     button.type = 'button';
     button.setAttribute('aria-pressed', String(view === panel.dataset.view));
@@ -48,6 +48,7 @@ function create(spec, controls, curvePlot) {
     views.append(button);
   }
   const spectrum = el('section', 'mps-card mps-spectrum-card');
+  spectrum.dataset.mpsView = 'spectrum';
   spectrum.setAttribute('aria-label', 'Pickup-coil spectrum');
   const heading = el('div', 'mps-heading');
   const scale = select('Spectrum normalization', axes);
@@ -64,6 +65,7 @@ function create(spec, controls, curvePlot) {
   spectrum.append(heading, actions, details, spectrumData, comparison);
 
   const wave = el('section', 'mps-card mps-wave');
+  wave.dataset.mpsView = 'trace';
   wave.setAttribute('aria-label', 'Time trace');
   const waveHeading = el('div', 'mps-heading');
   const trace = select('Time trace signal', [['moment', 'Field and moment'], ['voltage', 'Pickup voltage']]);
@@ -74,7 +76,18 @@ function create(spec, controls, curvePlot) {
   const legend = el('div', 'mps-legend');
   waveBox.append(canvas);
   wave.append(waveHeading, legend, waveBox);
-  panel.append(views, spectrum, wave);
+
+  const setup = el('figure', 'mps-card mps-setup');
+  setup.dataset.mpsView = 'setup';
+  const setupHeading = el('div', 'mps-heading');
+  const driveSettings = el('span', 'mps-drive-settings');
+  setupHeading.append(el('h2', '', 'MPS coil setup'), driveSettings);
+  const coils = el('canvas', 'mps-coils');
+  coils.setAttribute('role', 'img');
+  coils.setAttribute('aria-label', 'Cutaway of a drive coil surrounding a particle sample in a pickup coil and an empty balance coil. The drive field alternates along their shared axis.');
+  const caption = el('figcaption', 'mps-caption', 'The drive coil applies a sinusoidal field. Subtracting the empty coil’s voltage suppresses direct pickup. MPS reads the sample’s voltage harmonics. The M(H) loop traces magnetisation through a field sweep.');
+  setup.append(setupHeading, coils, caption);
+  panel.append(views, spectrum, setup, wave);
 
   function settingsLabel(c) {
     return `${c.drive} mT peak, ${c.rate} kHz, ${c.temperature} K, ${c.percentB}% B, ${c.amount}× loading. ` +
@@ -155,6 +168,7 @@ function create(spec, controls, curvePlot) {
   function update() {
     current = MPS.measure({...config, field: config.drive / 1000, frequency: config.rate * 1000,
       relaxationA: config.tauA * 1e-6, relaxationB: config.tauB * 1e-6, fractionB: config.percentB / 100});
+    driveSettings.textContent = number(config.drive) + ' mT peak · ' + number(config.rate) + ' kHz';
     renderSpectrum();
     drawWave();
     const [first, third, fifth] = current.harmonics.map(h => h.amplitude);
@@ -181,8 +195,12 @@ function create(spec, controls, curvePlot) {
     renderSpectrum();
     renderComparison();
   };
-  const size = new ResizeObserver(drawWave);
-  const theme = new MutationObserver(drawWave);
+  function drawGraphics() {
+    drawWave();
+    root.NanoMPSDiagram.draw(coils);
+  }
+  const size = new ResizeObserver(drawGraphics);
+  const theme = new MutationObserver(drawGraphics);
   const scheme = root.matchMedia('(prefers-color-scheme: dark)');
 
   function show(settings, clearReference) {
@@ -191,8 +209,9 @@ function create(spec, controls, curvePlot) {
     if (panel.hidden) {
       panel.hidden = false;
       size.observe(waveBox);
+      size.observe(coils);
       theme.observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
-      scheme.addEventListener('change', drawWave);
+      scheme.addEventListener('change', drawGraphics);
     }
     scale.value = config.scale;
     trace.value = config.trace;
@@ -215,7 +234,7 @@ function create(spec, controls, curvePlot) {
     cancelAnimationFrame(animation);
     size.disconnect();
     theme.disconnect();
-    scheme.removeEventListener('change', drawWave);
+    scheme.removeEventListener('change', drawGraphics);
   }
   return {panel, show, hide};
 }

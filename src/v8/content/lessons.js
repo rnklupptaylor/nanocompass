@@ -11,7 +11,7 @@ const LESSONS=[
    question:'Why is a ferrofluid magnetic only while a magnet is near?',
    slogan:'Switch the field on. Watch the gauge follow.',
    research:'Langevin magnetisation, Zeeman energy μB against k_BT, and the rigid-matrix (blocked) contrast.'},
-  {id:'magnetometer',num:'02',name:'In the magnetometer',accent:'#c0882a',engine:'magnetometer',
+  {id:'magnetometer',num:'02',name:'Magnetic measurements',accent:'#c0882a',engine:'magnetometer',
    question:'What does a magnetic measurement tell you about the particles?',
    slogan:'Open a loop, find the χ″ peak or read a magnetic fingerprint.',
    research:'M(H) loops, ZFC/FC and AC susceptibility of a size-distributed ensemble, plus magnetic particle spectroscopy of a two-population mixture.'},

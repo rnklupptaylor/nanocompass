@@ -1,4 +1,4 @@
-/* Teaching settings and experiments for the MPS mode in In the magnetometer. */
+/* Teaching settings and experiments for MPS in Magnetic measurements. */
 (function(root) {
 'use strict';
 const config = {
@@ -20,7 +20,7 @@ const references = '<p>Model and instrument: <a href="https://doi.org/10.1063/1.
 const guide = {
   lecture: {
     aim: 'How can a mixture of magnetic nanoparticles carry a fingerprint?',
-    read: 'A sinusoidal field drives the sample. As the moments begin to saturate, the sample response changes shape and contains odd multiples of the drive frequency. A pickup coil senses the rate of change of the total moment. The spectrum shows the peak pickup voltage at each harmonic, with drive-field feedthrough assumed removed.',
+    read: 'The setup shows the sample inside a pickup coil. A larger drive coil applies a sinusoidal field. As the moments begin to saturate, their response contains odd multiples of the drive frequency. The pickup coil senses the rate of change of the total moment, and an empty balance coil helps cancel direct pickup from the drive. The M(H) loop traces magnetisation through a field sweep. MPS repeats one drive cycle and measures the peak voltage at each harmonic.',
     tasks: [
       {text: 'Start with 20% population B. Keep its spectrum, then change population B to 80%. Compare the shapes at the same drive field and frequency.', set: config, clear: true},
       {text: 'Keep a spectrum and triple only the sample loading. Compare Divide by A₃ with Relative voltage. Which quantities change?', set: {...config, scale: 'voltage'}, clear: true},
@@ -32,7 +32,7 @@ const guide = {
   },
   research: {
     aim: 'Compare harmonic fingerprints at fixed excitation and test how composition and relaxation affect their interpretation.',
-    read: 'Aₙ is the peak voltage at frequency nf. Normalize to the third harmonic if the fundamental is rejected by the instrument, or to the ideal sample-only fundamental. Relative voltage uses the same fixed scale for every simulation. Compare fingerprints under matched excitation and temperature. A ratio alone cannot identify a composition uniquely.',
+    read: 'The MPS setup shows one example of a differential receiver. Direct drive pickup is assumed to cancel, so Aₙ is the peak sample voltage at frequency nf. The AC susceptibility mode probes the near-linear response at f. MPS uses the higher harmonics that appear when the drive field produces a nonlinear response. Normalize to the third harmonic if the fundamental is rejected by the instrument, or to the ideal sample-only fundamental. Relative voltage uses the same fixed scale for every simulation. Compare fingerprints under matched excitation and temperature. A ratio alone cannot identify a composition uniquely.',
     tasks: [
       {text: 'At 20.1 kHz and 30 mT peak, compare 20% and 80% B. Keep the first spectrum. Check whether the normalized spectral shape changes across several orders.', set: {...config, scale: 'first'}, clear: true},
       {text: 'Use population B alone. Keep the spectrum, then increase its effective relaxation time from 2 to 10 µs at fixed frequency. How does A₅/A₃ change?', set: {...config, percentB: 100}, clear: true},
