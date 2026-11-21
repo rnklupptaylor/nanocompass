@@ -2,7 +2,7 @@
 <html lang="en" data-level="lecture">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
 <title>Nanocompass · Superparamagnetism explored</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Ccircle r='42' fill='%23fcfcfb' stroke='%23485f88' stroke-width='8'/%3E%3Cpath d='M0 -34 L10 0 L-10 0Z' fill='%23d8382c'/%3E%3Cpath d='M0 34 L10 0 L-10 0Z' fill='%239b988f'/%3E%3C/svg%3E">
 <meta name="description" content="Interactive lessons on superparamagnetic nanoparticles and ferrofluids, from one flipping moment to patterns near a magnet.">
@@ -36,11 +36,20 @@
   </header>
   <main id="lessonView" class="lesson">
     <h1 id="lessonQuestion" class="lesson-question"></h1>
-    <nav class="pane-tabs" id="paneTabs" aria-label="Lower panel"><button type="button" data-pane="controls">Controls</button><button type="button" data-pane="guide">Guide</button><button type="button" data-pane="plot" class="plot-tab">Plot</button></nav>
+    <nav class="pane-tabs" id="paneTabs" aria-label="Lesson panels">
+      <button type="button" data-pane="controls" aria-controls="lessonControls">Controls</button>
+      <button type="button" data-pane="plot" aria-controls="lessonPlotPanel" class="plot-tab">Plot</button>
+      <button type="button" data-pane="readouts" aria-controls="lessonControls" class="readouts-tab">Readouts</button>
+      <button type="button" data-pane="guide" aria-controls="lessonGuide">Guide</button>
+    </nav>
     <div class="lesson-grid">
       <section id="lessonStage" class="panel stage" aria-label="Simulation"></section>
       <aside class="side">
-        <section class="panel controls-panel"><h2>Controls</h2><div id="lessonControls"></div></section>
+        <section class="panel controls-panel">
+          <h2>Controls</h2>
+          <select id="compactControls" class="compact-controls" aria-label="Choose a setting" hidden></select>
+          <div id="lessonControls"></div>
+        </section>
         <section class="panel guide"><h2>Guide</h2><div id="lessonGuide"></div></section>
         <section class="panel plot-panel" id="lessonPlotPanel" aria-label="Plot"></section>
       </aside>
@@ -67,6 +76,7 @@
 <script>@@INCLUDE:src/v8/lessons/ferrocell.js@@</script>
 <script>@@INCLUDE:src/v8/lessons/destinations.js@@</script>
 <script>@@INCLUDE:src/v8/lessons/lab.js@@</script>
+<script>@@INCLUDE:src/v8/ui/compact-controls.js@@</script>
 <script>@@INCLUDE:src/v8/ui/app.js@@</script>
 </body>
 </html>

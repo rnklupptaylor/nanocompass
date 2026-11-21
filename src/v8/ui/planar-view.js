@@ -14,9 +14,18 @@ const sub=t=>root.NanoLessons.sub(t);
 function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
 
 
+function plotHeight(wrap){
+  const stage=wrap.closest('#lessonPlotPanel');
+  if(stage?.clientHeight){
+    const header=wrap.querySelector('.pv-plot-title,.pv-outtabs');
+    return Math.max(90,stage.clientHeight-(header?.offsetHeight||0)-24);
+  }
+  return Math.round(Math.max(96,Math.min(165,root.innerHeight*.17)));
+}
+
 /* Small line plot for lesson panels. series: [{y, color, dash, label, width}] */
 function linePlot(cv,x,series,o={}){
-  const dpr=Math.min(2,root.devicePixelRatio||1),W=cv.clientWidth||300,H=o.h||Math.round(Math.max(96,Math.min(165,root.innerHeight*.17)));cv.style.height=H+'px';
+  const dpr=Math.min(2,root.devicePixelRatio||1),W=cv.clientWidth||300,H=o.h||plotHeight(cv.parentElement);cv.style.height=H+'px';
   const w=Math.round(W*dpr),h=Math.round(H*dpr);if(cv.width!==w)cv.width=w;if(cv.height!==h)cv.height=h;
   const g=cv.getContext('2d');g.clearRect(0,0,w,h);
   const ink=css('--ink-2')||'#555',grid=css('--grid')||'#ddd',L=36*dpr,R=8*dpr,T=(o.title?20:8)*dpr,B=28*dpr;
@@ -87,7 +96,7 @@ function mount(ctx,spec){
   else bar.append(run,restart,sound,el('span','pv-bar-label','Speed'),speed);
   const plotWrap=el('div','pv-plot');
   const inner=el('div','pv-stage-inner');inner.append(canvasWrap,hud,bar);stage.append(inner);
-  // On narrow screens the plot moves to its own tab in the lower panel, so the stage keeps its space.
+  // On narrow screens the Plot tab uses the stage position and shares the controls beneath it.
   const narrow=root.matchMedia?root.matchMedia('(max-width:900px)'):{matches:false,addEventListener(){}},plotHost=document.getElementById('lessonPlotPanel'),appEl=document.getElementById('app');
   function placePlot(){if(!spec.plot)return;(narrow.matches&&plotHost?plotHost:inner).append(plotWrap);}
   if(spec.plot){appEl?.setAttribute('data-has-plot','');placePlot();narrow.addEventListener('change',placePlot);}else appEl?.removeAttribute('data-has-plot');
@@ -98,19 +107,23 @@ function mount(ctx,spec){
   /* ---------- controls ---------- */
   controls.textContent='';
   const inputs={};
-  function apply(key,value,recreate,also){
+  function apply(key,value,recreate,also,sync=true){
     cfg[key]=value;for(const k of also||[])cfg[k]=value;
     if(recreate){configure();mAvg=0;history.length=0;if(spec.record)engine.startRecording();}
     else{const keep={Lx:engine.state.cfg.Lx,Ly:engine.state.cfg.Ly};engine.state.cfg=engine.sanitize({...cfg,...keep});
       if(engine.state.cfg.magDynamics==='legacy')for(const p of engine.state.particles)p.nextFlip=NaN;if(spec.record)engine.startRecording();} // reschedule Néel clocks for the new field or temperature
-    retime();syncInputs();
+    retime();if(sync)syncInputs();
   }
   // Controls may be grouped: {type:'group', label, open, items:[...]} becomes a collapsible section.
   const flat=[];
   function addControl(c,parent){
     if(c.type==='group'){const d=el('details','pv-group');if(c.open)d.open=true;d.append(el('summary','',c.label));parent.append(d);for(const x of c.items)addControl(x,d);return;}
     flat.push(c);
-    if(c.type!=='toggle'&&c.type!=='choice'){const sl=root.NanoSlider.make(c,cfg[c.key],{onChange:v=>apply(c.key,v,c.recreate,c.also)});parent.append(sl.row);inputs[c.key]={c,slider:sl};return;}
+    if(c.type!=='toggle'&&c.type!=='choice'){
+      const sl=root.NanoSlider.make(c,cfg[c.key],{
+        onInput:v=>{if(narrow.matches&&!c.recreate&&cfg[c.key]!==v)apply(c.key,v,false,c.also,false);},
+        onChange:v=>{if(cfg[c.key]!==v)apply(c.key,v,c.recreate,c.also);},
+      });parent.append(sl.row);inputs[c.key]={c,slider:sl};return;}
     const row=el('label','pv-control');const head=el('span','pv-control-head');head.append(el('span','pv-control-name',c.label));const out=el('output','pv-control-value');head.append(out);row.append(head);
     let input;
     if(c.type==='toggle'){input=el('input');input.type='checkbox';row.classList.add('pv-toggle');row.prepend(input);head.remove();row.append(el('span','pv-control-name',c.label));
@@ -218,5 +231,5 @@ function lesson(id,spec){
   root.NanoLessonViews=root.NanoLessonViews||{};let live=null;
   root.NanoLessonViews[id]={spec,mount(ctx){live=mount(ctx,spec);return live;},unmount(){live?.unmount();live=null;}};
 }
-root.NanoPlanarView={mount,lesson,fmtTime,linePlot};
+root.NanoPlanarView={mount,lesson,fmtTime,linePlot,plotHeight};
 })(typeof globalThis!=='undefined'?globalThis:this);

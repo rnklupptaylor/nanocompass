@@ -48,6 +48,7 @@ function mount(ctx,spec){
   const modes=el('div','seg mg-modes');modes.setAttribute('role','group');modes.setAttribute('aria-label','Measurement type');
   for(const [m,label] of [['loop','M(H) loop'],['zfc','ZFC / FC'],['ac','AC susceptibility'],['mps','MPS']]){
     const b=el('button','',label);b.type='button';b.dataset.m=m;b.onclick=()=>selectMode(m);
+    if(m==='ac'){b.setAttribute('aria-label',label);b.replaceChildren(el('span','mg-full-label',label),el('span','mg-short-label','AC'));}
     if(m==='mps'){b.title='Magnetic particle spectroscopy';b.setAttribute('aria-label','MPS (magnetic particle spectroscopy)');}
     modes.append(b);
   }

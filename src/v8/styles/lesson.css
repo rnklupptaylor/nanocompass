@@ -20,31 +20,62 @@ html.in-lesson,html.in-lesson body{overflow:hidden;height:100%}
 .side .panel.guide{flex:1 1 0}
 .side h2{margin:0 0 6px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .guide ol{margin:0;padding-left:20px}.guide li{margin:6px 0}
-.pane-tabs{display:none}
+.pane-tabs,.compact-controls{display:none}
 .plot-panel{display:none}
-/* Narrow screens: simulation on top, a tab strip switches the lower half between controls and guide. */
+/* Keep the result and the selected setting in view on a phone. */
 @media(max-width:900px){
   .top{flex-wrap:wrap;gap:6px 12px;padding:6px 12px}.top .nc-brand{font-size:20px}
   .top-tools{margin-left:auto}
-  .lesson{padding:8px 10px 10px;gap:8px;grid-template-rows:auto minmax(0,1.15fr) auto minmax(0,1fr)}
+  .lesson{padding:6px 8px max(6px,env(safe-area-inset-bottom));gap:6px;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto}
   .lesson-question{font-size:16px;padding:6px 10px}.lesson-question small{display:none}
   .lesson-grid{display:contents}
-  .stage{overflow:auto}
+  .stage{overflow:auto;overscroll-behavior:contain}
   .side{display:contents}
+  .lesson-question,.stage,.pane-tabs,.side .panel{grid-column:1}
   .lesson-question{grid-row:1}.stage{grid-row:2}
-  .pane-tabs{display:flex;gap:6px;grid-row:3}
-  .pane-tabs button{flex:1;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px;font-weight:700;font-size:14px}
-  .pane-tabs button[aria-pressed="true"]{background:var(--lesson-accent);border-color:var(--lesson-accent);color:#fff}
-  .side .panel.controls-panel,.side .panel.guide{max-height:none;grid-row:4}
-  .side .panel.plot-panel{grid-row:4}
-  #app:not([data-pane="guide"]) .side .panel.guide,#app:not([data-pane="controls"]) .side .panel.controls-panel{display:none}
+  .pane-tabs{display:flex;gap:4px;grid-row:3}
+  .pane-tabs button{flex:1;min-width:0;min-height:36px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:4px;font-weight:700;font-size:13px}
+  .pane-tabs button[aria-pressed="true"]{background:color-mix(in srgb,var(--lesson-accent) 20%,var(--surface));border-color:var(--lesson-accent);color:var(--ink)}
+  .side .panel.controls-panel,.side .panel.guide{max-height:32dvh;grid-row:4;overscroll-behavior:contain}
+  .side .panel.plot-panel{grid-row:2;padding:8px;overscroll-behavior:contain}
+  .plot-panel .pv-plot{border:0;padding:0}
+  #app:not([data-pane="guide"]) .side .panel.guide,#app[data-pane="guide"] .side .panel.controls-panel{display:none}
+  #app[data-pane="plot"] .stage{visibility:hidden}
   #app[data-pane="plot"] .side .panel.plot-panel{display:block}
-  #app:not([data-has-plot]) .plot-tab{display:none}
+  #app:not([data-has-plot]) .plot-tab,#app:not([data-has-readouts]) .readouts-tab{display:none}
   .pv-clock,.pv-gauge-scale,.pv-bar-label{display:none}
   .pv-btn{padding:5px 10px;font-size:13px}
   .pv-gauge-label{font-size:12px}.pv-gauge-value{font-size:12px}
+
+  #app[data-compact-controls] .controls-panel{padding:6px 8px;max-height:36dvh}
+  #app[data-compact-controls] .controls-panel h2{display:none}
+  .compact-controls{display:block;width:100%;min-height:40px;padding:4px 8px;border:1px solid var(--line);border-radius:7px;background:var(--surface-2);font-size:16px}
+  #app[data-compact-controls] #lessonControls>.pv-group{padding:0;border:0}
+  #app[data-compact-controls] #lessonControls .pv-group>summary,
+  #app[data-compact-controls] #lessonControls .pv-control:not(.compact-selection),
+  #app[data-compact-controls]:not([data-pane="readouts"]) #lessonControls .pv-readouts,
+  #app[data-pane="readouts"] :is(.compact-controls,#lessonControls>.pv-group,#lessonControls>.pv-control){display:none}
+  #app[data-compact-controls] #lessonControls .compact-selection{margin:4px 0 0}
+  #app[data-compact-controls] .compact-selection .pv-control-head{display:none}
+  #app[data-compact-controls] .compact-selection .seg{flex-wrap:wrap;max-width:100%}
+  #app[data-compact-controls] .compact-selection .seg button{min-height:36px}
+  #app[data-compact-controls] .compact-selection.pv-toggle{min-height:40px}
+  #app[data-pane="readouts"] .pv-readouts{margin:0;padding:0;border:0}
 }
-@media(max-width:560px){.top-tools .icon-btn{display:none}}
+@media(max-width:560px){.top-tools .icon-btn,.top-num{display:none}.top{gap:6px 8px}.top .nc-brand{font-size:18px}}
+@media(max-width:360px){
+  #topLogo .nc-word{display:none}
+  #topLogo .nc-brand::before{content:'‹ Home';font-size:15px}
+}
+@media(max-width:560px) and (max-height:680px),(max-width:900px) and (orientation:landscape) and (max-height:520px){
+  .lesson-question{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+}
+@media(min-width:561px) and (max-width:900px) and (orientation:landscape) and (max-height:520px){
+  .lesson{grid-template-columns:minmax(0,1fr) clamp(220px,37vw,305px);grid-template-rows:auto minmax(0,1fr)}
+  .stage,.side .panel.plot-panel{grid-column:1;grid-row:1/-1}
+  .pane-tabs{grid-column:2;grid-row:1}
+  .side .panel.controls-panel,.side .panel.guide,#app[data-compact-controls] .controls-panel{grid-column:2;grid-row:2;max-height:none;align-self:start;max-block-size:100%}
+}
 
 /* Particle lessons (src/v8/ui/planar-view.js) */
 :root{--stage-bg:#eaf1f9;--field-line:#9db4cf;--ligand:rgba(95,132,177,.2);--particle-core:#3b3a36;--good:#1b8a5a;--warn-c:#a86b00;--bad:#c0392f}
@@ -104,7 +135,7 @@ html.in-lesson,html.in-lesson body{overflow:hidden;height:100%}
 .pv-plots2 canvas{display:block;width:100%}
 @media(max-width:700px){.pv-plots2{grid-template-columns:1fr}}
 @media(max-height:760px) and (min-width:901px){.pv-plot canvas{max-height:120px}}
-@media(max-width:900px) and (max-height:700px){.lesson{grid-template-rows:auto minmax(0,1.6fr) auto minmax(0,1fr)}.pv-canvas-wrap{min-height:80px}.pv-gauge-value{display:none}.stage.pv-stage{gap:5px;padding:6px}}
+@media(max-width:900px) and (max-height:700px){.pv-canvas-wrap{min-height:80px}.pv-gauge-value{display:none}.stage.pv-stage{gap:5px;padding:6px}}
 /* Wide stages (projectors, 16:9 screens): gauge, buttons and plot move beside the particles. */
 @media(min-width:901px){
   .stage.pv-stage{container-type:size}
@@ -126,9 +157,11 @@ html.in-lesson,html.in-lesson body{overflow:hidden;height:100%}
 .mg-sample canvas{border-radius:8px;border:1px solid var(--line)}
 .mg-info{font-size:12px;line-height:1.4;color:var(--ink-2);max-width:100%}
 .mg-modes{margin-right:8px}
+.mg-short-label{display:none}
 @media(max-width:900px){.mg-inner{grid-template-columns:1fr;grid-template-rows:minmax(0,.8fr) minmax(0,1.2fr)}.mg-info{display:none}.mg-modes button{padding:5px 7px;font-size:12px}}
+@media(max-width:360px){.mg-full-label{display:none}.mg-short-label{display:inline}}
 
-.mg-plot{display:flex;flex-direction:column;gap:6px}
+.mg-plot{display:flex;flex-direction:column;gap:6px;min-height:0}
 .mg-plotbox{flex:1 1 0;min-height:0;position:relative}
 .mg-plotbox canvas{position:absolute;inset:0;width:100%;height:100%}
 .mg-steps{display:flex;flex-wrap:wrap;gap:4px 6px;margin:0;padding:0;list-style:none;counter-reset:st;font-size:12px}
@@ -138,7 +171,7 @@ html.in-lesson,html.in-lesson body{overflow:hidden;height:100%}
 .mg-steps li.now::before{background:var(--lesson-accent);color:#fff}
 .mg-steps li.done{color:var(--ink-2)}
 .mg-steps li.done::before{content:'✓';background:var(--surface-3)}
-.mg-hint{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);padding:10px 16px;border:1px dashed var(--line);border-radius:10px;background:var(--surface);color:var(--ink-2);font-size:14px;text-align:center;max-width:80%}
+.mg-hint{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);padding:10px 16px;border:1px dashed var(--line);border-radius:10px;background:var(--surface);color:var(--ink-2);font-size:14px;text-align:center;max-width:80%;pointer-events:none}
 .mg-hint[hidden]{display:none}
 @keyframes pvPulse{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--lesson-accent) 30%,transparent)}}
 .pv-pulse{animation:pvPulse 2.4s ease-in-out infinite}
@@ -183,13 +216,27 @@ html.in-lesson,html.in-lesson body{overflow:hidden;height:100%}
   .mps-panel[data-view="spectrum"] .mps-wave,.mps-panel[data-view="trace"] .mps-spectrum-card{display:none}
 }
 @media(max-width:900px){
+  .mg-stage .pv-bar{order:-1}
+  .mg-steps li{padding:2px 6px;font-size:11px}
   .mps-panel{grid-template-columns:1fr;grid-template-rows:auto minmax(min-content,1fr);gap:5px}
   .mps-switch{display:inline-flex;justify-self:start}
   .mps-switch button{padding:3px 8px;font-size:12px}
   .mps-panel[data-view="spectrum"] .mps-wave,.mps-panel[data-view="trace"] .mps-spectrum-card{display:none}
   .mps-card{padding:8px}
+  .mps-wavebox{min-height:130px}
   .mps-spectrum th,.mps-spectrum td{padding:2px 4px}
   .mps-actions{margin-top:5px}
+}
+@media(max-width:360px){
+  .mps-heading{flex-wrap:nowrap}
+  .mps-heading h2{font-size:14px}
+  .mps-select{max-width:46%}
+  .mps-caption{margin:3px 0}
+}
+@media(max-width:360px),(max-width:900px) and (orientation:landscape) and (max-height:520px){
+  .mps-spectrum{font-size:11px;line-height:1.15}
+  .mps-spectrum th,.mps-spectrum td{padding-block:1px}
+  .mps-band{height:3px}
 }
 
 /* Layer lessons (src/v8/ui/layer-view.js) */
@@ -247,7 +294,17 @@ html.in-lesson,html.in-lesson body{overflow:hidden;height:100%}
 .ns-line input[type=range]{flex:1;min-width:0;accent-color:var(--lesson-accent,var(--accent))}
 .ns-step{flex:0 0 auto;width:24px;height:24px;padding:0;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);font:700 15px/1 var(--ui)}
 .ns-step:hover{border-color:var(--lesson-accent,var(--accent))}
-@media(max-width:900px){.ns-step{width:30px;height:30px}}
+@media(max-width:900px){
+  #app[data-compact-controls] .compact-selection.ns-control{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0 6px}
+  #app[data-compact-controls] .compact-selection.ns-control .pv-control-head{display:flex;grid-area:1/2;margin:0}
+  .compact-selection .pv-control-name:is(label){display:none}
+  .compact-selection .ns-line{grid-area:1/1;gap:4px;min-width:0}
+  .compact-selection .ns-line input[type=range]{height:40px;margin:0}
+  .compact-selection .ns-step{width:38px;height:44px}
+  .compact-selection .ns-num{width:64px;min-height:44px;font-size:16px}
+  .compact-selection .ns-unit{white-space:nowrap}
+  .compact-selection .pv-hint{grid-column:1/-1}
+}
 
 /* Ferrocell point inspector (src/v8/ui/ferrocell-inspector.js) */
 .stage.fc-stage{position:relative}

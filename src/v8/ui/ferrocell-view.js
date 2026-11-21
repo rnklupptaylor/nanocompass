@@ -81,9 +81,9 @@ function mount(ctx,spec){
   cv.addEventListener('pointerup',()=>{const click=down&&!down.moved;if(drag){drag=null;quick=false;dirty=true;}
     if(click&&Math.hypot(...down.cell)<CELL_R&&img)root.NanoFerrocellInspector.open(api,...down.cell);down=null;});
   cv.addEventListener('pointerleave',()=>{hover=null;renderReadouts();});
-  const onResize=()=>{if(img)draw();};root.addEventListener('resize',onResize);
+  const size=new ResizeObserver(()=>{if(img)draw();});size.observe(wrap);
   buildControls();renderGuide();raf=requestAnimationFrame(loop);
-  return {unmount(){api.closeInspector?.();cancelAnimationFrame(raf);root.removeEventListener('resize',onResize);}};
+  return {unmount(){api.closeInspector?.();cancelAnimationFrame(raf);size.disconnect();}};
 }
 function lesson(id,spec){root.NanoLessonViews=root.NanoLessonViews||{};let live=null;
   root.NanoLessonViews[id]={spec,mount(ctx){live=mount(ctx,spec);return live;},unmount(){live?.unmount();live=null;}};}

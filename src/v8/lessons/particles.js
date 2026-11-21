@@ -88,7 +88,7 @@ V.lesson('fluid',{
     const t=times(engine);if(!t.mu)return;const Bmax=200,key=[cfg.temperature,cfg.coreNm,cfg.medium].join('|'),alpha=B=>t.mu*B*1e-3/t.kT;
     if(wrap._key!==key){wrap._key=key;wrap._pts=[];}
     if(cfg.medium==='fluid'&&engine.state.simTime>2e-5)wrap._pts.push([cfg.field_mT,mAvg]);if(wrap._pts.length>400)wrap._pts.shift();
-    const PH=Math.round(Math.max(96,Math.min(165,root.innerHeight*.17))),dpr=Math.min(2,root.devicePixelRatio||1),w=Math.round(wrap.clientWidth*dpr),h=Math.round(PH*dpr);cv.width=w;cv.height=h;cv.style.height=PH+'px';
+    const PH=V.plotHeight(wrap),dpr=Math.min(2,root.devicePixelRatio||1),w=Math.round(wrap.clientWidth*dpr),h=Math.round(PH*dpr);cv.width=w;cv.height=h;cv.style.height=PH+'px';
     const g=cv.getContext('2d'),L=40*dpr,B=26*dpr,X=x=>L+(w-L-10*dpr)*x/Bmax,Y=y=>h-B-(h-B-8*dpr)*y;
     const ink=getComputedStyle(document.documentElement).getPropertyValue('--ink-2'),acc=getComputedStyle(document.documentElement).getPropertyValue('--accent');
     g.strokeStyle=ink;g.fillStyle=ink;g.lineWidth=dpr;g.font=11*dpr+'px sans-serif';g.beginPath();g.moveTo(L,8*dpr);g.lineTo(L,h-B);g.lineTo(w-10*dpr,h-B);g.stroke();

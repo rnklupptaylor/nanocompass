@@ -44,6 +44,7 @@ function buildTop(){
   $('topLevel').append(segment('level',levelChoices));
 }
 function renderLesson(item){
+  $('app').dataset.lesson=item.id;
   $('app').style.setProperty('--lesson-accent',item.accent);
   $('topNum').textContent=item.num;$('topName').textContent=item.name;
   const q=$('lessonQuestion');
@@ -63,6 +64,7 @@ function route(){
   const views=window.NanoLessonViews||{};
   if(state.lesson&&views[state.lesson.id]?.unmount)views[state.lesson.id].unmount();
   state.lesson=item||null;
+  setPane('controls');
   $('start').hidden=!!item;$('app').hidden=!item;document.documentElement.classList.toggle('in-lesson',!!item);
   document.title=item?item.name+' · Nanocompass':'Nanocompass · Superparamagnetism explored';
   if(item){renderLesson(item);window.scrollTo(0,0);}else window.NanoLogo.bind(null);
@@ -70,6 +72,7 @@ function route(){
 function setPane(p){$('app').dataset.pane=p;document.querySelectorAll('#paneTabs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pane===p)));}
 document.querySelectorAll('#paneTabs button').forEach(b=>b.addEventListener('click',()=>setPane(b.dataset.pane)));setPane('controls');
 buildStart();buildTop();setTheme(state.theme);setLevel(state.level);
+window.NanoCompactControls.bind($('app'),$('lessonControls'),$('compactControls'));
 window.addEventListener('hashchange',route);route();
 window.Nanocompass={state,setLevel,setTheme,route};
 })();
